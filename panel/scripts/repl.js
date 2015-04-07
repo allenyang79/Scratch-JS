@@ -89,18 +89,17 @@ Repl.prototype.deliverContent = function(content){
 
   try {
     var es5 = transformer.transform(content);
-
-    var evalOptions = {};
-    if(this.executionContext !== 'top') evalOptions.frameURL = this.executionContext;
-
-    chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
-      if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
-        logError(exceptionInfo.value);
-    });
-  }
-  catch (e) {
+  } catch (e) {
     logError(e);
   }
+
+  var evalOptions = {};
+  if(this.executionContext !== 'top') evalOptions.frameURL = this.executionContext;
+
+  chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
+    if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
+      logError(exceptionInfo.value);
+  });
 }
 
 Repl.prototype.toggleOutput = function(e) {

@@ -14,7 +14,14 @@ Babel.prototype = Object.create(Transformer.prototype);
 Babel.prototype.constructor = Babel;
 
 Babel.prototype.transform = function(input) {
-  return babel.transform(input, this.opts).code;
+  var compiled = '';
+  try {
+    compiled = babel.transform(input, this.opts).code;
+  } catch(e) {
+    console.log(e);
+    logError("Babel SyntaxError: " + e.message);
+  }
+  return compiled;
 }
 
 Babel.prototype.getVersion = function() {
